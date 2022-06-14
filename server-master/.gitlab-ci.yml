@@ -1,0 +1,58 @@
+image: monitor:5000/buildproject:1
+
+stages:
+  - build
+  - QA
+  - deploy
+
+before_script:
+  - chmod +x gradlew
+
+build-jar:
+  stage: build
+  only:
+    - master
+  except:
+    changes:
+      - documents/**/*
+  script:
+    - curl https://repo.maven.apache.org/maven2/io/vertx/vertx-web-openapi/4.0.0/vertx-web-openapi-4.0.0.pom # hack to fix SSL issues
+    - gradle shadowJar
+  artifacts:
+    paths:
+      - build/libs/
+
+sonarqube:
+  stage: QA
+  except:
+    changes:
+      - documents/**/*
+  script:
+    - curl https://repo.maven.apache.org/maven2/io/vertx/vertx-web-openapi/4.0.0/vertx-web-openapi-4.0.0.pom # hack to fix SSL issues
+    - gradle test
+
+
+deploy:
+  image: monitor:5000/deployproject:2
+  before_script:
+    - echo "we don't need gradle or maven anymore, time to deploy"
+  stage: deploy
+  only:
+    - master
+  except:
+    changes:
+      - documents/**/*
+  script:
+    - cd build/libs/
+    - rename 's/.*\.jar$/stratego.jar/' *.jar
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H 172.18.18.201 >> ~/.ssh/known_hosts
+    - scp -q stratego.jar gitlab-runner@172.18.18.201:"/opt/group-${CI_PROJECT_NAMESPACE:(-2)}/stratego.jar"
+    - scp -q ../../stratego-api.yaml gitlab-runner@172.18.18.201:"/opt/group-${CI_PROJECT_NAMESPACE:(-2)}/stratego-api.yaml"
+    - scp -q ../../src/main/resources/conf/server-config.json gitlab-runner@172.18.18.201:"/opt/group-${CI_PROJECT_NAMESPACE:(-2)}/conf/config.json"
+    - ssh gitlab-runner@172.18.18.201 sudo systemctl restart group-${CI_PROJECT_NAMESPACE:(-2)}
+    - systemctl -H gitlab-runner@172.18.18.201 status group-${CI_PROJECT_NAMESPACE:(-2)}
+  environment: production

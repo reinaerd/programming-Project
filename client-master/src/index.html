@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stratego 23</title>
+    <link href="favicon.gif"
+          rel="icon"
+          type="image/gif">
+    <link href="assets/css/reset.css" rel="stylesheet"/>
+    <link href="assets/css/screen.css" rel="stylesheet"/>
+</head>
+<body>
+
+<main>
+    <section id="versions">
+        <h1>STRATEGO</h1>
+        <h2 class="scroll">Select version</h2>
+        <div id="version-buttons"></div>
+        <button class="magnify blue-button" data-current="versions" data-target="statistics">Statistics</button>
+        <button class="magnify blue-button" data-current="versions" data-target="rules">Rules</button>
+    </section>
+
+    <section id="skins">
+        <h1>STRATEGO</h1>
+        <h2 class="scroll">Select team</h2>
+        <button class="magnify" data-action="setSkin" data-current="skins" data-skin="sonic"
+                data-target="game-board">Sonic
+        </button>
+        <button class="magnify" data-action="setSkin" data-current="skins" data-skin="mario"
+                data-target="game-board">Mario
+        </button>
+        <button class="magnify" data-action="backToMenu" data-current="skins" data-target="versions">Return to menu
+        </button>
+    </section>
+
+    <section id="game-board">
+        <div id="game-board-content">
+            <aside aria-label="options" id="options">
+                <h2>Options</h2>
+                <img alt="mario-running" src="assets/media/mario-victory.png"/>
+                <div>
+                    <button class="magnify" data-action="savePreset">Save board preset</button>
+                    <button class="magnify" data-action="loadPreset">Load board preset</button>
+                    <button class="magnify" data-action="backToMenu" data-current="game-board" data-target="versions"
+                            id="stop">Return to menu
+                    </button>
+                </div>
+            </aside>
+
+            <aside aria-label="enemy-team" id="enemy-team">
+                <h2>Enemy team</h2>
+                <ul></ul>
+            </aside>
+
+            <div id="playing-field">
+                <h2 class="scroll" id="messages">Welcome to Stratego</h2>
+                <ul class="border" id="board"></ul>
+
+                <footer>
+                    <button class="magnify" data-action="setPreset" data-current="game-board" data-target="play">
+                        Continue
+                    </button>
+                </footer>
+            </div>
+
+            <aside aria-label="your-team" id="your-team">
+                <h2>Your team</h2>
+                <ul></ul>
+            </aside>
+        </div>
+    </section>
+
+    <section id="play">
+        <h1>Create or join a game</h1>
+        <img alt="Sonic and Mario" src="assets/media/maxresdefault.jpg" title="Sonic and Mario">
+        <form>
+            <label for="room-id"></label>
+            <input id="room-id" maxlength="20" placeholder="Enter a room ID or leave empty to join a random game"
+                   type="text">
+            <button class="magnify" data-action="setLobby" data-current="play" data-target="start">Play</button>
+        </form>
+    </section>
+
+    <section id="start">
+        <h1>Waiting for game to start</h1>
+        <img alt="Sonic and Mario" src="assets/media/maxresdefault.jpg" title="Sonic and Mario"/>
+        <h2>Waiting for player...</h2>
+    </section>
+
+    <section id="statistics">
+        <div>
+            <h1>Stratego Statistics</h1>
+            <div id="team-stats-container">
+                <!-- Mario Statistics Table -->
+                <div id="mario-stats">
+                    <p class="scroll">Team Mario</p>
+                    <div class="border">
+                        <table aria-label="mario-statistics">
+                            <tbody>
+                            <tr>
+                                <td>Win/lose ratio:</td>
+                                <td id="mario-win-lose"></td>
+                            </tr>
+                            <tr>
+                                <td>Amount of games played:</td>
+                                <td id="mario-games-played"></td>
+                            </tr>
+                            <tr>
+                                <td>Average time spent in game:</td>
+                                <td id="mario-average-time"></td>
+                            </tr>
+                            <tr>
+                                <td>Quickest game:</td>
+                                <td id="mario-quickest-game"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Sonic Statistics Table -->
+                <div id="sonic-stats">
+                    <p class="scroll">Team Sonic</p>
+                    <div class="border">
+                        <table aria-label="sonic-statistics">
+                            <tbody>
+                            <tr>
+                                <td>Win/lose ratio:</td>
+                                <td id="sonic-win-lose"></td>
+                            </tr>
+                            <tr>
+                                <td>Amount of games played:</td>
+                                <td id="sonic-games-played"></td>
+                            </tr>
+                            <tr>
+                                <td>Average time spent in game:</td>
+                                <td id="sonic-average-time"></td>
+                            </tr>
+                            <tr>
+                                <td>Quickest game:</td>
+                                <td id="sonic-quickest-game"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="general-stats">
+                <p class="scroll">General Statistics</p>
+                <div class="border">
+                    <table aria-label="general-statistics">
+                        <tbody>
+                        <tr>
+                            <th colspan="2" id="original">Stratego: Original</th>
+                            <th colspan="2" id="duel">Stratego: Duels</th>
+                            <th colspan="2" id="infiltrator">Stratego: Infiltrator</th>
+                        </tr>
+                        <tr>
+                            <td>W/L Ratio</td>
+                            <td id="original-win-loss"></td>
+                            <td>W/L Ratio</td>
+                            <td id="duel-win-loss"></td>
+                            <td>W/L Ratio</td>
+                            <td id="infiltrator-win-loss"></td>
+                        </tr>
+                        <tr>
+                            <td>Won</td>
+                            <td id="original-won"></td>
+                            <td>Won</td>
+                            <td id="duel-won"></td>
+                            <td>Won</td>
+                            <td id="infiltrator-won"></td>
+                        </tr>
+                        <tr>
+                            <td>Lost</td>
+                            <td id="original-lost"></td>
+                            <td>Lost</td>
+                            <td id="duel-lost"></td>
+                            <td>Lost</td>
+                            <td id="infiltrator-lost"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button class="magnify" data-action="backToMenu" data-current="statistics" data-target="versions">Return
+                to menu
+            </button>
+        </div>
+    </section>
+
+
+    <div class="hidden" id="popup"></div>
+
+    <section id="rules">
+
+        <div class="border" id="wrapper-rules">
+
+            <h1>Stratego Rules</h1>
+
+            <h2 class="scroll" id="outline-of-the-game">Outline of the game</h2>
+            <div>
+                <p>Both players have an army of 10 (Stratego Duel) or 40 (Stratego Original) pieces,
+                    including a flag. You must try to capture your opponent’s flag while protecting
+                    your own. You first put together a secret formation by placing your playing
+                    pieces on your half of the game board in such a way as to conceal their rank from your opponent. In
+                    other words, you
+                    place your pieces and your opponent place theirs. The pieces have a
+                    specific sequence:
+                    the higher the number, the higher the rank. If a piece with a higher rank takes a piece with a lower
+                    rank, the piece with
+                    the higher rank wins and the piece with the lower rank is taken off the board. The flag can be
+                    conquered
+                    by any of the
+                    enemy’s pieces that can be moved.</p>
+            </div>
+
+            <h3 class="scroll" id="playing-pieces-and-formation">The playing pieces and formation</h3>
+            <div>
+                <p>Each piece has its own illustration and number indicating its rank. The field Marshal has the highest
+                    rank and has been
+                    assigned the number 10, the General has a 9, etc., down to the Spy with the number 1. Only the bombs
+                    and flag do not have a number because they have a special role in the game.</p>
+                <p>You position your pieces on the bottom four rows of the game board. The two middle rows (with the
+                    lakes) remain empty. No playing pieces may
+                    be placed here when setting up the game. Setting up the board is an important part of the game. It
+                    determines whether you win or lose. </p>
+
+            </div>
+
+            <h3 class="scroll" id="course-of-the-game">Course of the game</h3>
+            <div>
+                <p>Red starts. The players then move their pieces in turns. You move a piece to an empty field or to a
+                    field occupied by one of your opponent’s pieces. The latter option is called an attack.
+                    Each player may only move a single piece during his or her turn!</p>
+            </div>
+
+            <h3 class="scroll" id="moving-rules">Moving</h3>
+            <div>
+                <p>You can move a piece one place to the left or right, or one place forward or backward. The Scout (number
+                    2) is an exception to this rule; more details below. Each field can accommodate one piece only;
+                    the pieces cannot jump over
+                    other pieces and they may not be moved diagonally.The playing pieces may not be positioned in or
+                    jump over the two lakes in the center of the board.
+                    The bombs and the flag may never be moved and therefore remain in the same place throughout the
+                    duration of the game.</p>
+                <p>Special rules apply to the Scouts (2). Scouts can jump over an unlimited number of empty fields. Of
+                    course, they can only do so in a straight line, i.e. to the left, to the right, forward or backward.
+                    As far
+                    as they can as long as the fields are empty, because they cannot jump over their own army’s pieces
+                    or those of the enemy. Neither can they jump over the lakes. Scouts are the only pieces that can
+                    launch an attack from a sizeable distance.</p>
+            </div>
+
+            <h3 class="scroll" id="attacking-rules">Attacking</h3>
+            <div>
+                <p>If one of your pieces is immediately in front of, next to or behind one of your
+                    opponent’s pieces, you can attack that piece.
+                    Attacks are launched as follows: Select your piece. Move it onto your opponent and then you get to
+                    know if you win, lose or draw.</p>
+                <p>The piece with the lowest rank loses and is removed from the board. If the
+                    attacking piece wins, it takes the place of the losing piece. If the defending piece
+                    wins it simply remains where it was.
+                    If you attack a piece of the same rank, both pieces lose and are removed from the
+                    board. You are never obliged to attack.</p>
+                <p>As mentioned above, Scouts can attack from a considerable distance. The fields
+                    in between must be empty, though, and the Scout must move in a straight line. A
+                    Scout (2) can therefore eliminate a Spy (1) from a sizeable distance.</p>
+            </div>
+
+            <h3 class="scroll" id="rank-rules">The ranks</h3>
+            <div>
+                <p>The Field Marshal (10) outranks a General (9) and all the pieces of a lower rank. The General (9)
+                    outranks the Colonels
+                    (8) and all the lower ranks. This applies down to the Spy (1), which holds the lowest rank. The
+                    ranks are depicted in the
+                    correct order on the screen and are listed at the beginning of these instructions where they are
+                    given by name and rank
+                    (and number). It’s a good idea to memorize the ranks. Of course, you can play with just
+                    the numbers – i.e. my “8” beats your “5” – but it sounds better to say my “Colonel” beats
+                    your “Lieutenant”.</p>
+                <p>Bombs and Miners: (3). Any piece that attacks a bomb loses. The bomb stays in the
+                    same place. The only exception to this rule is the Miner. If a Miner attacks a bomb it
+                    becomes inactive and must be removed from play. The Miner then takes the place of
+                    the destroyed bomb.</p>
+                <p>The Spy (1) holds the lowest rank. Any piece that attacks a Spy wins.
+                    But, the mysterious and resourceful Spy can also be very powerful. If a Spy attacks a
+                    Field Marshal (10), she outsmarts him and wins the battle!
+                    This only applies if the Spy launches the attack. If the Field Marshal attacks, it beats
+                    a Spy and clears it from the board.
+                    The Flag can be conquered by any piece. This includes a jumping Scout!</p>
+            </div>
+
+            <h3 class="scroll" id="original-rules">Stratego Original</h3>
+            <div>
+                <p>All the pieces are used when playing Stratego Original. Each player therefore uses 40 playing pieces.
+                    This means that
+                    when setting up all the fields, the bottom four rows are filled. The object of the game Stratego is
+                    to capture your enemy’s flag. It would also be wise to position your flag somewhere at the rear,
+                    making it more difficult to capture instantly. You only have six bombs to use as extra protection
+                    for your flag. You must divide your high and low pieces evenly across
+                    the field so that your opponent has a harder time</p>
+            </div>
+
+            <h3 class="scroll" id="duel-rules">Stratego Duel</h3>
+            <div>
+                <p>The pieces are set up on the bottom four rows of the game board.
+                    You can therefore choose from 40 fields for your 10 pieces. You
+                    could, for example, position all your pieces at the back in a corner,
+                    and then protect your flag with two bombs. The
+                    advantage here is that only the enemy miners can capture the flag,
+                    because they alone can sweep the bombs. The disadvantage is
+                    that your opponent will immediately know where to look for the flag
+                    once the screen has gone. You can choose the smartest formation
+                    for yourself.</p>
+            </div>
+
+            <h3 class="scroll" id="infiltrator-rules">Stratego Infiltrator</h3>
+            <div>
+                <p>Play the game with only 7 Scouts and the Infiltrator (a total of 40 playing pieces). Play as you
+                    would
+                    Stratego Original, except for the special rules that apply to the Infiltrator.</p>
+                <p>The Infiltrator holds the lowest rank (1). Any piece that attacks
+                    it wins. But he does have one special power! The Infiltrator
+                    comes into his own when operating on enemy territory where
+                    he can use his special power. When in enemy territory, he can
+                    ‘infiltrate’ which means he can attack an enemy playing piece
+                    from one or two spaces away. Tap the enemy piece, tell your
+                    opponent you are infiltrating and guess the rank of the piece
+                    you are attacking.</p>
+                <p>If you guessed correctly, that piece loses. The Infiltrator does NOT take the place
+                    of the losing piece but returns to the field where he was.
+                    If you guessed incorrectly, the defending piece stays where it was and the
+                    Infiltrator returns to the field where he was. Your opponent now knows the
+                    position of your Infiltrator!</p>
+            </div>
+
+            <h3 class="scroll" id="winner-rules">The winner</h3>
+            <div>
+                <p>You can win the game by conquering your opponent’s flag. You also win if your opponent cannot move
+                    anything. This
+                    would be the case if your opponent were left with only bombs and a flag, or if bombs block the path
+                    of
+                    his or her last
+                    moving pieces.</p>
+            </div>
+        </div>
+
+        <aside class="border" aria-label="quick-menu">
+            <ul>
+                <li><p>Quick Menu</p></li>
+                <li class="text-transform"><a href="#outline-of-the-game">Outline of the Game</a></li>
+                <li class="text-transform"><a href="#playing-pieces-and-formation">Playing Pieces and Formation</a></li>
+                <li class="text-transform"><a href="#course-of-the-game">Course of the Game</a></li>
+                <li class="text-transform"><a href="#moving-rules">Moving</a></li>
+                <li class="text-transform"><a href="#attacking-rules">Attacking</a></li>
+                <li class="text-transform"><a href="#rank-rules">The Ranks</a></li>
+                <li class="text-transform"><a href="#original-rules">Stratego: Original</a></li>
+                <li class="text-transform"><a href="#duel-rules">Stratego: Duel</a></li>
+                <li class="text-transform"><a href="#infiltrator-rules">Stratego: Infiltrator</a></li>
+                <li class="text-transform"><a href="#winner-rules">Winner</a></li>
+            </ul>
+        </aside>
+        <button class="magnify" data-action="backToMenu" data-current="rules" data-target="versions">Return to Menu
+        </button>
+
+    </section>
+
+    <section id="infiltrate">
+        <div>
+            <h2 class="scroll">Select Infiltrator</h2>
+            <ul class="border"></ul>
+            <button data-action="infiltrate">Infiltrate</button>
+        </div>
+    </section>
+
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api-communication.js"></script>
+<script src="assets/js/game-versions.js"></script>
+<script src="assets/js/game-board.js"></script>
+<script src="assets/js/game-turns.js"></script>
+<script src="assets/js/game-moves.js"></script>
+<script src="assets/js/game-attacks.js"></script>
+<script src="assets/js/game-pieces.js"></script>
+<script src="assets/js/statistics.js"></script>
+<script src="assets/js/game.js"></script>
+<script src="assets/js/button-actions.js"></script>
+<script src="assets/js/button-navigation.js"></script>
+<script src="assets/js/script.js"></script>
+</body>
+</html>
